@@ -9,7 +9,7 @@ import { createCampaignsCredential as _createCampaignsCredential } from './backe
 import { ExternalServiceKind, Scalars } from '../../../graphql-operations'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import classNames from 'classnames'
-import { CodeHostSshPublicKey } from './CodeHostSSHPublicKey'
+import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
 
 export interface AddCredentialModalProps {
     onCancel: () => void

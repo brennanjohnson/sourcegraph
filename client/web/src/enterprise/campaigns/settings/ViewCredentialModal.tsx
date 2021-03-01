@@ -2,7 +2,7 @@ import Dialog from '@reach/dialog'
 import React from 'react'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
-import { CodeHostSshPublicKey } from './CodeHostSSHPublicKey'
+import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
 
 interface ViewCredentialModalProps {
     codeHost: CampaignsCodeHostFields

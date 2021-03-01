@@ -7,7 +7,7 @@ import { ErrorAlert } from '../../../components/alerts'
 import { deleteCampaignsCredential } from './backend'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
-import { CodeHostSshPublicKey } from './CodeHostSSHPublicKey'
+import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
 
 export interface RemoveCredentialModalProps {
     codeHost: CampaignsCodeHostFields

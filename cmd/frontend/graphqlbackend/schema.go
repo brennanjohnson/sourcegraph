@@ -919,6 +919,12 @@ type CampaignsCodeHost {
     The configured credential, if any.
     """
     credential: CampaignsCredential
+
+    """
+    If true, some of the repositories on this code host require
+    an SSH key to be configured.
+    """
+    requiresSSH: Boolean!
 }
 
 """

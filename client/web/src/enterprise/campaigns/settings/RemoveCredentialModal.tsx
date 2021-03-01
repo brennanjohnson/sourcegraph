@@ -6,7 +6,6 @@ import { asError, isErrorLike } from '../../../../../shared/src/util/errors'
 import { ErrorAlert } from '../../../components/alerts'
 import { deleteCampaignsCredential } from './backend'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
-import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
 import { ModalHeader } from './ModalHeader'
 

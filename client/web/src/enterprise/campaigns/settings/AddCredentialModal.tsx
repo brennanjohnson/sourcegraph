@@ -7,9 +7,9 @@ import { asError, isErrorLike } from '../../../../../shared/src/util/errors'
 import { ErrorAlert } from '../../../components/alerts'
 import { createCampaignsCredential as _createCampaignsCredential } from './backend'
 import { ExternalServiceKind, Scalars } from '../../../graphql-operations'
-import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import classNames from 'classnames'
 import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
+import { ModalHeader } from './ModalHeader'
 
 export interface AddCredentialModalProps {
     onCancel: () => void
@@ -137,12 +137,11 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
             aria-labelledby={labelId}
         >
             <div className="test-add-credential-modal">
-                <h3 id={labelId}>
-                    Campaigns credentials: {defaultExternalServices[externalServiceKind].defaultDisplayName}
-                </h3>
-                <p>
-                    <strong>{externalServiceURL}</strong>
-                </p>
+                <ModalHeader
+                    id={labelId}
+                    externalServiceKind={externalServiceKind}
+                    externalServiceURL={externalServiceURL}
+                />
                 {twoStepModal && (
                     <div className="d-flex w-100 justify-content-between mb-4">
                         <div className="flex-grow-1 mr-2">

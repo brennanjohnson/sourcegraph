@@ -8,6 +8,7 @@ import { deleteCampaignsCredential } from './backend'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
+import { ModalHeader } from './ModalHeader'
 
 export interface RemoveCredentialModalProps {
     codeHost: CampaignsCodeHostFields
@@ -44,12 +45,12 @@ export const RemoveCredentialModal: React.FunctionComponent<RemoveCredentialModa
             aria-labelledby={labelId}
         >
             <div className="test-remove-credential-modal">
-                <h3 id={labelId}>
-                    Campaigns credentials: {defaultExternalServices[codeHost.externalServiceKind].defaultDisplayName}
-                </h3>
-                <p className="mb-4">
-                    <strong>{codeHost.externalServiceURL}</strong>
-                </p>
+                <ModalHeader
+                    id={labelId}
+                    externalServiceKind={codeHost.externalServiceKind}
+                    externalServiceURL={codeHost.externalServiceURL}
+                />
+
                 <h3 className="text-danger mb-4">Removing credentials is irreversible</h3>
 
                 {isErrorLike(isLoading) && <ErrorAlert error={isLoading} history={history} />}

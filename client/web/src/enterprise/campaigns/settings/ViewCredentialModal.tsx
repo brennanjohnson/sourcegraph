@@ -1,8 +1,8 @@
 import Dialog from '@reach/dialog'
 import React from 'react'
-import { defaultExternalServices } from '../../../components/externalServices/externalServices'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
 import { CodeHostSshPublicKey } from './CodeHostSshPublicKey'
+import { ModalHeader } from './ModalHeader'
 
 interface ViewCredentialModalProps {
     codeHost: CampaignsCodeHostFields
@@ -24,12 +24,11 @@ export const ViewCredentialModal: React.FunctionComponent<ViewCredentialModalPro
             aria-labelledby={labelId}
         >
             <div className="test-remove-credential-modal">
-                <h3 id={labelId}>
-                    Campaigns credentials: {defaultExternalServices[codeHost.externalServiceKind].defaultDisplayName}
-                </h3>
-                <p>
-                    <strong>{codeHost.externalServiceURL}</strong>
-                </p>
+                <ModalHeader
+                    id={labelId}
+                    externalServiceKind={codeHost.externalServiceKind}
+                    externalServiceURL={codeHost.externalServiceURL}
+                />
 
                 <h4>Personal access token</h4>
                 <p>

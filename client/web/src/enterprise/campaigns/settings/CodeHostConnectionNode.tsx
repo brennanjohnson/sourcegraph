@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import * as H from 'history'
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon'
 import CheckCircleOutlineIcon from 'mdi-react/CheckCircleOutlineIcon'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
-import { CampaignsCodeHostFields, ExternalServiceKind, Scalars } from '../../../graphql-operations'
+import { CampaignsCodeHostFields, Scalars } from '../../../graphql-operations'
 import { AddCredentialModal } from './AddCredentialModal'
 import { RemoveCredentialModal } from './RemoveCredentialModal'
 import { Subject } from 'rxjs'
-import ContentCopyIcon from 'mdi-react/ContentCopyIcon'
-import copy from 'copy-to-clipboard'
 import { ViewCredentialModal } from './ViewCredentialModal'
 
 export interface CodeHostConnectionNodeProps {

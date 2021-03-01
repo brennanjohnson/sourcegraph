@@ -3023,6 +3023,20 @@ type Query {
     ): Campaign
 
     """
+    Looks up a batch change by namespace and batch change name.
+    """
+    batchChange(
+        """
+        The namespace where the batch change lives.
+        """
+        namespace: ID!
+        """
+        The batch change's name.
+        """
+        name: String!
+    ): BatchChange
+
+    """
     EXPERIMENTAL: Queries code insights
     """
     insights: InsightConnection

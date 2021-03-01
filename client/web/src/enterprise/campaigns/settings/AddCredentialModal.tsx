@@ -5,9 +5,11 @@ import { LoadingSpinner } from '@sourcegraph/react-loading-spinner'
 import { Form } from '../../../../../branded/src/components/Form'
 import { asError, isErrorLike } from '../../../../../shared/src/util/errors'
 import { ErrorAlert } from '../../../components/alerts'
-import { createCampaignsCredential } from './backend'
+import { createCampaignsCredential as _createCampaignsCredential } from './backend'
 import { ExternalServiceKind, Scalars } from '../../../graphql-operations'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
+import classNames from 'classnames'
+import { CodeHostSshPublicKey } from './CodeHostSSHPublicKey'
 
 export interface AddCredentialModalProps {
     onCancel: () => void
@@ -17,6 +19,11 @@ export interface AddCredentialModalProps {
     externalServiceKind: ExternalServiceKind
     externalServiceURL: string
     requiresSSH: boolean
+
+    /** For testing only. */
+    createCampaignsCredential?: typeof _createCampaignsCredential
+    /** For testing only. */
+    initialStep?: Step
 }
 
 const helpTexts: Record<ExternalServiceKind, JSX.Element> = {
@@ -67,6 +74,8 @@ const helpTexts: Record<ExternalServiceKind, JSX.Element> = {
     [ExternalServiceKind.OTHER]: <span>Unsupported</span>,
 }
 
+type Step = 'add-token' | 'get-ssh-key'
+
 export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps> = ({
     onCancel,
     afterCreate,
@@ -75,11 +84,14 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
     externalServiceKind,
     externalServiceURL,
     requiresSSH,
+    createCampaignsCredential = _createCampaignsCredential,
+    initialStep = 'add-token',
 }) => {
     const labelId = 'addCredential'
     const [isLoading, setIsLoading] = useState<boolean | Error>(false)
     const [credential, setCredential] = useState<string>('')
     const [sshPublicKey, setSSHPublicKey] = useState<string>()
+    const [step, setStep] = useState<Step>(initialStep)
     const twoStepModal: boolean = requiresSSH
 
     const onChangeCredential = useCallback<React.ChangeEventHandler<HTMLInputElement>>(event => {
@@ -99,6 +111,7 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
                 })
                 if (twoStepModal && createdCredential.sshPublicKey) {
                     setSSHPublicKey(createdCredential.sshPublicKey)
+                    setStep('get-ssh-key')
                 } else {
                     afterCreate()
                 }
@@ -106,7 +119,15 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
                 setIsLoading(asError(error))
             }
         },
-        [afterCreate, userID, credential, externalServiceKind, externalServiceURL, twoStepModal]
+        [
+            afterCreate,
+            userID,
+            credential,
+            externalServiceKind,
+            externalServiceURL,
+            twoStepModal,
+            createCampaignsCredential,
+        ]
     )
 
     return (
@@ -115,24 +136,36 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
             onDismiss={onCancel}
             aria-labelledby={labelId}
         >
-            <div className="web-content test-add-credential-modal">
+            <div className="test-add-credential-modal">
                 <h3 id={labelId}>
-                    {defaultExternalServices[externalServiceKind].defaultDisplayName} campaigns token for{' '}
-                    {externalServiceURL}
+                    Campaigns credentials: {defaultExternalServices[externalServiceKind].defaultDisplayName}
                 </h3>
+                <p>
+                    <strong>{externalServiceURL}</strong>
+                </p>
                 {twoStepModal && (
-                    <div className="d-flex w-100 justify-content-between">
+                    <div className="d-flex w-100 justify-content-between mb-4">
                         <div className="flex-grow-1 mr-2">
-                            <p className="mb-0">1. Add token</p>
+                            <p className={classNames('mb-0 py-2', step === 'get-ssh-key' && 'text-muted')}>
+                                1. Add token
+                            </p>
                             <div className="add-credential-modal__modal-step-ruler add-credential-modal__modal-step-ruler--purple" />
                         </div>
                         <div className="flex-grow-1 ml-2">
-                            <p className="mb-0">2. Get SSH Key</p>
-                            <div className="add-credential-modal__modal-step-ruler add-credential-modal__modal-step-ruler--blue" />
+                            <p className={classNames('mb-0 py-2', step === 'add-token' && 'text-muted')}>
+                                2. Get SSH Key
+                            </p>
+                            <div
+                                className={classNames(
+                                    'add-credential-modal__modal-step-ruler',
+                                    step === 'add-token' && 'add-credential-modal__modal-step-ruler--gray',
+                                    step === 'get-ssh-key' && 'add-credential-modal__modal-step-ruler--blue'
+                                )}
+                            />
                         </div>
                     </div>
                 )}
-                {!(twoStepModal && sshPublicKey) && (
+                {step === 'add-token' && (
                     <>
                         {isErrorLike(isLoading) && <ErrorAlert error={isLoading} history={history} />}
                         <Form onSubmit={onSubmit}>
@@ -171,12 +204,25 @@ export const AddCredentialModal: React.FunctionComponent<AddCredentialModalProps
                         </Form>
                     </>
                 )}
-                {twoStepModal && sshPublicKey && (
+                {step === 'get-ssh-key' && (
                     <>
                         <p>
                             An SSH key has been generated for your campaigns code host connection. Copy the public key
                             below and enter it on your code host.
                         </p>
+                        <CodeHostSshPublicKey externalServiceKind={externalServiceKind} sshPublicKey={sshPublicKey!} />
+                        <div className="d-flex justify-content-end">
+                            <button type="button" className="btn btn-outline-secondary mr-2" onClick={afterCreate}>
+                                Close
+                            </button>
+                            <button
+                                type="button"
+                                className="btn btn-primary test-add-credential-modal-submit"
+                                onClick={afterCreate}
+                            >
+                                Add credential
+                            </button>
+                        </div>
                     </>
                 )}
             </div>

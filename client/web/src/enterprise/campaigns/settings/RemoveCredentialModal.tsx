@@ -7,7 +7,7 @@ import { ErrorAlert } from '../../../components/alerts'
 import { deleteCampaignsCredential } from './backend'
 import { CampaignsCodeHostFields, CampaignsCredentialFields } from '../../../graphql-operations'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
-import { CodeHostSSHPublicKey } from './CodeHostConnectionNode'
+import { CodeHostSshPublicKey } from './CodeHostSSHPublicKey'
 
 export interface RemoveCredentialModalProps {
     codeHost: CampaignsCodeHostFields
@@ -44,15 +44,13 @@ export const RemoveCredentialModal: React.FunctionComponent<RemoveCredentialModa
             aria-labelledby={labelId}
         >
             <div className="test-remove-credential-modal">
-                <h3>
+                <h3 id={labelId}>
                     Campaigns credentials: {defaultExternalServices[codeHost.externalServiceKind].defaultDisplayName}
                 </h3>
-                <p>
+                <p className="mb-4">
                     <strong>{codeHost.externalServiceURL}</strong>
                 </p>
-                <h3 className="text-danger" id={labelId}>
-                    Removing credentials is irreversible
-                </h3>
+                <h3 className="text-danger mb-4">Removing credentials is irreversible</h3>
 
                 {isErrorLike(isLoading) && <ErrorAlert error={isLoading} history={history} />}
 
@@ -62,7 +60,7 @@ export const RemoveCredentialModal: React.FunctionComponent<RemoveCredentialModa
                 </p>
 
                 {codeHost.requiresSSH && (
-                    <CodeHostSSHPublicKey
+                    <CodeHostSshPublicKey
                         externalServiceKind={codeHost.externalServiceKind}
                         sshPublicKey={credential.sshPublicKey!}
                         showInstructionsLink={false}
@@ -71,7 +69,7 @@ export const RemoveCredentialModal: React.FunctionComponent<RemoveCredentialModa
                     />
                 )}
 
-                <div className="d-flex justify-content-end pt-5">
+                <div className="d-flex justify-content-end pt-1">
                     <button
                         type="button"
                         disabled={isLoading === true}

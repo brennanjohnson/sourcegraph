@@ -3,18 +3,13 @@ import * as H from 'history'
 import CheckboxBlankCircleOutlineIcon from 'mdi-react/CheckboxBlankCircleOutlineIcon'
 import CheckCircleOutlineIcon from 'mdi-react/CheckCircleOutlineIcon'
 import { defaultExternalServices } from '../../../components/externalServices/externalServices'
-import {
-    CampaignsCodeHostFields,
-    CampaignsCredentialFields,
-    ExternalServiceKind,
-    Scalars,
-} from '../../../graphql-operations'
+import { CampaignsCodeHostFields, ExternalServiceKind, Scalars } from '../../../graphql-operations'
 import { AddCredentialModal } from './AddCredentialModal'
 import { RemoveCredentialModal } from './RemoveCredentialModal'
 import { Subject } from 'rxjs'
-import Dialog from '@reach/dialog'
 import ContentCopyIcon from 'mdi-react/ContentCopyIcon'
 import copy from 'copy-to-clipboard'
+import { ViewCredentialModal } from './ViewCredentialModal'
 
 export interface CodeHostConnectionNodeProps {
     node: CampaignsCodeHostFields
@@ -97,7 +92,7 @@ export const CodeHostConnectionNode: React.FunctionComponent<CodeHostConnectionN
                                 className="btn btn-success test-code-host-connection-node-btn-add"
                                 onClick={onClickAdd}
                             >
-                                Add token
+                                Add credentials
                             </button>
                         )}
                     </div>
@@ -125,121 +120,6 @@ export const CodeHostConnectionNode: React.FunctionComponent<CodeHostConnectionN
                     externalServiceURL={node.externalServiceURL}
                     requiresSSH={node.requiresSSH}
                 />
-            )}
-        </>
-    )
-}
-
-interface ViewCredentialModalProps {
-    codeHost: CampaignsCodeHostFields
-    credential: CampaignsCredentialFields
-
-    onClose: () => void
-}
-
-export const ViewCredentialModal: React.FunctionComponent<ViewCredentialModalProps> = ({
-    credential,
-    codeHost,
-    onClose,
-}) => {
-    const labelId = 'viewCredential'
-    return (
-        <Dialog
-            className="modal-body modal-body--top-third p-4 rounded border"
-            onDismiss={onClose}
-            aria-labelledby={labelId}
-        >
-            <div className="test-remove-credential-modal">
-                <h3 id={labelId}>
-                    Campaigns credentials: {defaultExternalServices[codeHost.externalServiceKind].defaultDisplayName}
-                </h3>
-                <p>
-                    <strong>{codeHost.externalServiceURL}</strong>
-                </p>
-
-                <h4>Personal access token</h4>
-                <p>
-                    <i>PATs cannot be viewed after entering.</i>
-                </p>
-
-                <hr className="mb-3" />
-
-                <CodeHostSSHPublicKey
-                    externalServiceKind={codeHost.externalServiceKind}
-                    sshPublicKey={credential.sshPublicKey!}
-                />
-
-                <div className="d-flex justify-content-end pt-5">
-                    <button type="button" className="btn btn-outline-secondary" onClick={onClose}>
-                        Close
-                    </button>
-                </div>
-            </div>
-        </Dialog>
-    )
-}
-
-export interface CodeHostSSHPublicKeyProps {
-    externalServiceKind: ExternalServiceKind
-    sshPublicKey: string
-    label?: string
-    showInstructionsLink?: boolean
-    showCopyButton?: boolean
-}
-
-const configInstructionLinks: Record<ExternalServiceKind, string> = {
-    [ExternalServiceKind.GITHUB]:
-        'https://docs.github.com/en/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account',
-    [ExternalServiceKind.GITLAB]: 'https://docs.gitlab.com/ee/ssh/#add-an-ssh-key-to-your-gitlab-account',
-    [ExternalServiceKind.BITBUCKETSERVER]:
-        'https://confluence.atlassian.com/bitbucketserver/ssh-user-keys-for-personal-use-776639793.html',
-    [ExternalServiceKind.AWSCODECOMMIT]: 'unsupported',
-    [ExternalServiceKind.BITBUCKETCLOUD]: 'unsupported',
-    [ExternalServiceKind.GITOLITE]: 'unsupported',
-    [ExternalServiceKind.OTHER]: 'unsupported',
-    [ExternalServiceKind.PERFORCE]: 'unsupported',
-    [ExternalServiceKind.PHABRICATOR]: 'unsupported',
-}
-
-export const CodeHostSSHPublicKey: React.FunctionComponent<CodeHostSSHPublicKeyProps> = ({
-    externalServiceKind,
-    sshPublicKey,
-    showInstructionsLink = true,
-    showCopyButton = true,
-    label = 'Public SSH key',
-}) => {
-    const [copied, setCopied] = useState<boolean>(false)
-    const onCopy = useCallback(() => {
-        copy(sshPublicKey)
-        setCopied(true)
-    }, [sshPublicKey])
-    useEffect(() => {
-        if (copied) {
-            const timer = setTimeout(() => {
-                setCopied(false)
-            }, 1500)
-            return () => clearTimeout(timer)
-        }
-        return () => undefined
-    }, [copied])
-    return (
-        <>
-            <div className="d-flex justify-content-between align-items-end mb-2">
-                <h4>{label}</h4>
-                {showCopyButton && (
-                    <button type="button" className="btn btn-secondary" onClick={onCopy}>
-                        <ContentCopyIcon className="icon-inline" />
-                        {copied ? 'Copied!' : 'Copy'}
-                    </button>
-                )}
-            </div>
-            <textarea className="form-control text-monospace mb-3" rows={5} value={sshPublicKey} />
-            {showInstructionsLink && (
-                <p>
-                    <a href={configInstructionLinks[externalServiceKind]} target="_blank" rel="noopener">
-                        Configuration instructions
-                    </a>
-                </p>
             )}
         </>
     )

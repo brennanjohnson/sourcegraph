@@ -2682,7 +2682,6 @@
 
 "@sourcegraph/eslint-plugin-sourcegraph@link:client/packages/@sourcegraph/eslint-plugin-sourcegraph":
   version "0.0.0"
-  uid ""
 
 "@sourcegraph/event-positions@^1.0.4":
   version "1.0.4"
@@ -2707,7 +2706,6 @@
 
 "@sourcegraph/extension-api-types@link:client/packages/@sourcegraph/extension-api-types":
   version "0.0.0"
-  uid ""
 
 "@sourcegraph/prettierrc@^3.0.3":
   version "3.0.3"
@@ -18818,11 +18816,6 @@ require-uncached@^1.0.2:
     caller-path "^0.1.0"
     resolve-from "^1.0.0"
 
-requireindex@~1.1.0:
-  version "1.1.0"
-  resolved "https://registry.npmjs.org/requireindex/-/requireindex-1.1.0.tgz#e5404b81557ef75db6e49c5a72004893fe03e162"
-  integrity sha1-5UBLgVV+91225JxacgBIk/4D4WI=
-
 requireindex@~1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/requireindex/-/requireindex-1.2.0.tgz#3463cdb22ee151902635aa6c9535d4de9c2ef1ef"
@@ -19823,7 +19816,6 @@ sourcegraph@^24.0.0:
 
 "sourcegraph@link:client/packages/sourcegraph-extension-api":
   version "0.0.0"
-  uid ""
 
 space-separated-tokens@^1.0.0:
   version "1.1.2"
@@ -21354,9 +21346,9 @@ typescript@~4.0.2:
   integrity sha512-tEu6DGxGgRJPb/mVPIZ48e69xCn2yRmCgYmDugAVwmJ6o+0u1RI18eO7E7WBTLYLaEVVOhwQmcdhQHweux/WPg==
 
 ua-parser-js@^0.7.18:
-  version "0.7.20"
-  resolved "https://registry.npmjs.org/ua-parser-js/-/ua-parser-js-0.7.20.tgz#7527178b82f6a62a0f243d1f94fd30e3e3c21098"
-  integrity sha512-8OaIKfzL5cpx8eCMAhhvTlft8GYF8b2eQr6JkCyVdrgjcytyOmPCXrqXFcUnhonRpLlh5yxEZVohm6mzaowUOw==
+  version "0.7.28"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.28.tgz#8ba04e653f35ce210239c64661685bf9121dec31"
+  integrity sha512-6Gurc1n//gjp9eQNXjD9O3M/sMwVtN5S8Lv9bvOYBfKfDNiIIhqiyi01vMBO45u4zkDE420w/e0se7Vs+sIg+g==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.5"
